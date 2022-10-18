@@ -1,0 +1,43 @@
+<ng-container *ngIf="filesResult$ | async as result" >
+  <ul class="list-group mt-3"  *ngIf="result.success == true ; else erroMsg" >
+    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let file of result.payload  " >
+      <p>{{file.isDirectory ? 'Folder name : ' : 'File name : '}} {{file.name}}<br>
+        <span>Path: {{file.fullPath}}<br></span>
+        <span *ngIf="!file.isDirectory">ext: {{file.fileInfo.ext}}<br></span>
+        <span *ngIf="!file.isDirectory">size: {{file.fileAttr.size}} bytes <br></span>
+        <span>created: {{convertTime(file.fileAttr.birthtime)}} </span>
+      </p><br>
+
+      <button class="btn bg-success  btn-sm" (click)="viewFiles(file.fullPath)" *ngIf="file.isDirectory">View</button>
+    </li>
+
+  </ul>
+
+  <!-- Pagination -->
+  <div *ngIf="result.pageInfo && result.pageInfo.size != 1">
+      <div class="position-relative mt-5 mb-5" >
+        <p class="position-absolute top-0 start-50 translate-middle mb-5"> {{result.pageInfo.currentPage}} / {{result.pageInfo.size}} </p>
+      </div>
+      <br>
+      <div class="position-relative mt-3">
+          <nav aria-label="Page navigation example ">
+            <ul class="pagination position-absolute top-100 start-50 translate-middle">
+              <li class="page-item"><a class="page-link" (click)="changePage(result.pageInfo.currentPage - 1)" *ngIf="result.pageInfo.currentPage > 1">Previous</a></li>
+              <li class="page-item"><a class="page-link" (click)="changePage(result.pageInfo.currentPage + 1)" *ngIf="result.pageInfo.currentPage != result.pageInfo.size">Next</a></li>
+            </ul>
+          </nav>
+      </div>
+  </div>
+  <br> <br>
+
+
+
+  <ng-template #erroMsg>
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert" *ngIf="result.message">
+      <strong>oops! </strong>{{result.message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </ng-template>
+
+  </ng-container>
+

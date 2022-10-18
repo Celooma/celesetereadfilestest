@@ -1,0 +1,11 @@
+
+
+  <div class="row g-3 align-items-center">
+    <div class="col">
+      <input type="text" class="form-control"  name="usrinput" placeholder="Enter directory" [(ngModel)]="userInput">
+    </div>
+    <div class="col">
+      <button class="btn bg-success " (click)="searchFiles()"  [disabled]="userInput.trim() == '' ">Search</button>
+    </div>
+
+  </div>
